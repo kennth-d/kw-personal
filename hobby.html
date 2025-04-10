@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenneth's | Favorite Game</title>
+    <link rel="stylesheet" href="./static/slicknav/dist/slicknav.css"/>
+    <link rel="stylesheet" href="./static/styles/index.css">
+    <link rel="stylesheet" href="./static/styles/hobby.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/favicon/favicon-16x16.png">
+</head>
+<body>
+    
+    <header>
+        <h1>Kenneth White's Game Clips</h1>
+    </header>
+
+    <nav id="mobile-nav"></nav>
+
+    <nav id="nav-bar">
+        <ul class="menu">
+            <li><a href="./index.html#about">About me</a></li>
+            <li><a href="./index.html#classes">Classes</a></li>
+            <li><a href="./index.html#favorites">Favorites</a></li>
+            <li><a href="./index.html" id="hobby">Home</a></li>
+        </ul>
+    </nav>
+
+    <section id="game-description">
+        <header><h2>Dragon Ball FighterZ</h2></header>
+        <div>
+            <p>
+                Dragon Ball FighterZ is a fast-paced 2.5D fighting game.  
+                It features iconic characters from the Dragon Ball series in intense 3v3 tag-team battles.
+                The game blends accessible controls with deep mechanics, offering flashy combos, cinematic super moves, 
+                and high-level competitive play, all wrapped in a visually striking art style that closely mirrors the anime.
+            </p>
+        </div>
+    </section>
+
+    <section id="videos">
+        <header><h2 id="video-header">Assists</h2></header>
+
+        <p id="video-description">
+            One of the core mechanics of the game allows you to call out your other characters breifly to attack, or in some cases defend.
+        </p>
+
+        <div id="video-container">
+
+            <video id="video-1" width="640" preload="auto">
+                <source src="./static/video/DBFZ - assist.mp4" type="video/mp4">
+            </video>
+
+            <div id="video-controls">
+                <button class="buttons" id="previous"><span>&lt&lt</span></button>
+                <button class="buttons" id="play"><span><svg viewbox="0, 0, 50, 50"><polygon points="20 15, 35 25, 20 35"></polygon></svg></span></button>
+                <button class="buttons" id="next"><span>&gt&gt</span></button>
+            </div> 
+        </div>
+        
+
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="./static/slicknav/dist/jquery.slicknav.min.js"></script>
+    <script src="./static/js/hobby.js"></script>
+    <script>
+        $('.menu').slicknav({
+            label: "",
+        });
+    </script>
+</body>
+</html>

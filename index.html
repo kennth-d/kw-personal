@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenneth's Website | Home</title>
+    <link rel="stylesheet" href="./static/slicknav/dist/slicknav.css"/>
+    <link rel="stylesheet" href="./static/styles/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./static/favicon/favicon-16x16.png">
+</head>
+<body>
+    
+    <header>
+        <h1>Kenneth White's Personal Website</h1>
+    </header>
+
+    <nav id="mobile-nav"></nav>
+
+    <nav id="nav-bar">
+        <ul class="menu">
+            <li><a href="#about">About me</a></li>
+            <li><a href="#classes">Classes</a></li>
+            <li><a href="#favorites">Favorites</a></li>
+            <li><a href="./hobby.html" id="hobby">2nd page</a></li>
+        </ul>
+    </nav>
+
+    <div id="welcome">
+        <p id="welcome-text">Good <span class="welcome">{dayPeriod}</span> <span class="welcome">{name}</span>! It's <span class="welcome">{time}</span> EST on <span class="welcome">{date}</span>, and its <span class="welcome">{weather}</span> in Detroit right now.</p>
+        <p id="sub-welcome"><span class="welcome">It looks like this is your first visit, Welcome!</span></p>
+
+        <form name="name-form" action="" method="POST">
+            <input name="name" type="text" autocomplete="on" placeholder="Please enter your name">
+            <button name="name-form" class="save" type="submit"><span>Save</span></button>
+        </form>
+
+    </div>
+
+    <section id="my-images">
+        <header><h2>My Images</h2></header>
+
+        <div class="images">
+            <figure>
+                <figcaption>Kickflip backside lipslide</figcaption>
+                <img src="./static/images/kickflip-backlip.gif" alt="student performing kickflip to backside lip slide on an a-frame ramp to rail." width="250px">
+            </figure>
+            
+            <figure>
+                <figcaption>Malaysia 2016</figcaption>
+                <img src="./static/images/k-white-personal-1.JPG" alt="student kneeling on a rock in a riverbed right in front of a waterfall." width="250px">
+            </figure>
+        </div>
+        
+    </section>
+
+    <section id="about">
+        <header><h2>About me</h2></header>
+        <p>
+            Hey there!  I'm a software engineering student who enjoys video games, weight lifting and building cool projects.
+            Whether it be a game, an app or something outside of the cyberspace, I like to get my hands dirty and put in some work.
+            Feel free to checkout <a href="https://github.com/kennth-d?tab=repositories" target="_blank">my Github</a> to see what I'm working on.
+        </p>
+        <p>
+            Some of my recent experience includes building, maintaining and installing boat docks and hydraulic boat lifts.
+            Before that, I served in the United States Marine Corps as an Infantry Mortarman, where I developed problem-solving and teamwork skills.
+            My current focus is to transition into a tech role as a Software Engineer.
+        </p>
+    </section>
+
+    <section id="classes">
+        <header><h2>Classes</h2></header>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Course Number</th>
+                    <th>Course Description</th>
+                    <th>Course Link</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td class="left">CIS 2252</td>
+                    <td class="center">
+                        This course introduces students to C++ syntax and semantics.  Some of the topics covered include
+                        control structures, arrays, pointers, strings, class definition and object-based development
+                    </td>
+                    <td class="right"><a href="https://catalog.oaklandcc.edu/search/?search=CIS+2252" target="blank">link</a></td>
+                </tr>
+                    
+                <tr>
+                    <td class="left">CIS 2151</td>
+                    <td class="center">
+                        This course is designed to introduce the student to the essentials of Java, utilizing an 
+                        Integrated Development Environment (IDE) for practical experience in coding, debugging, and running applications.
+                    </td>
+                    <td class="right"><a href="https://catalog.oaklandcc.edu/search/?search=CIS+2151" target="blank">link</a></td>
+                </tr>
+
+                <tr>
+                    <td class="left">CIS 1512</td>
+                    <td class="center">
+                        This course is focused on formal methods and approaches used in the design, development, testing and maintenance of computer software.
+                    </td>
+                    <td class="right"><a href="https://catalog.oaklandcc.edu/search/?search=CIS+1512" target="_blank">link</a></td>
+                </tr>
+
+                <tr>
+                    <td class="left">CIS 1420</td>
+                    <td class="center">
+                        This is a comprehensive front-end Web design and development course designed to 
+                        equip students with essential skills in building and styling interactive Web pages.
+                    </td>
+                    <td class="right"><a href="https://catalog.oaklandcc.edu/search/?search=CIS+1420" target="_blank">link</a></td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </section>
+
+    <section id="favorites">
+        <header><h2>Favorites</h2></header>
+
+        <div class="favorites">
+            <ul>
+                <li id="fav-food">Favorite Dessert - Cheesecake</li>
+                <li id="fav-game">Favorite Video Game - <a href="https://en.wikipedia.org/wiki/Dragon_Ball_FighterZ" target="_blank">Dragon Ball Fighterz</a></li>
+                <li id="fav-movie">Favorite Movie - <a href="https://en.wikipedia.org/wiki/The_Equalizer_(film)" target="_blank">The Equalizer</a></li>
+                <li id="fav-exercise">Favorite Exercise - Chest Dips</li>
+                
+            </ul>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="./static/slicknav/dist/jquery.slicknav.min.js"></script>
+    <script src="./static/js/index.js"></script>
+    <script>
+        $('.menu').slicknav({
+            label: "",
+        });
+    </script>
+
+</body>
+</html>
