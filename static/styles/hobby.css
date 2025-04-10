@@ -5,7 +5,7 @@ div#video-container {
     margin:1.5em 0;
 }
 video {
-    width: 640;
+    width: 640px;
 }
 div#video-controls {
     display: flex;
