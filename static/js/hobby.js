@@ -62,6 +62,7 @@ function preloadVideos(urls) {
         
         videoElement.src = url;
         videoElement.load();
+        videoElement.width = video.width;
 
         videoElement.oncanplaythrough  = () => {
             loadedVids++;
