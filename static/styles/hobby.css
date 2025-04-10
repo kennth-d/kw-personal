@@ -4,6 +4,9 @@ div#video-container {
     display:block;
     margin:1.5em 0;
 }
+video {
+    width: 640;
+}
 div#video-controls {
     display: flex;
     margin-top: 1em;
