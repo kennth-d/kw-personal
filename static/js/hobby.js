@@ -84,6 +84,9 @@ function swapVideo(idx) {
     videoWrapper.appendChild(newVideo);
     video = newVideo;
     video.onended = onVideoEnd;
+
+    videoDescription.innerHTML = videoDescriptions[idx];
+    videoHeader.innerHTML = videoHeaders[idx];
 }
 //swaps the svg of the play btn.
 function updatePlayBtnIcon() {
