@@ -197,7 +197,7 @@ section#my-images {
     text-decoration: none;
     font-weight: 600;
 }
-#about a, a:link, a:before, a:visited {
+#about a {
     color: var(--link-special-color);
 }
 #about a:hover {
