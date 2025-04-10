@@ -106,7 +106,7 @@ function enableButtons() {
     prevBtn.addEventListener("click", () =>{
         if (isPlaying) video.pause();
         if (currentVideoIdx < 1) {
-            currentVideoIdx = videoBlobs.length - 1;
+            currentVideoIdx = videos.length - 1;
         } else {
             currentVideoIdx--;
         }//end if else
