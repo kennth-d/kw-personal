@@ -113,4 +113,8 @@ window.addEventListener("load", () => {
         isPlaying = false;
         updatePlayBtnIcon()
     });
+    video.addEventListener("canplay", () => {
+        const loadingScreen = document.getElementById("loading-screen");
+        loadingScreen.style.display = "none";
+    })
 });
