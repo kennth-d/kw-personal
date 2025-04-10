@@ -35,11 +35,14 @@ const videoHeaders = [
     "TOD"
 ];
 
+const videoWrapper = document.querySelector("#video-wrapper");
 const videoHeader = document.querySelector("#video-header");
 const videoDescription = document.querySelector("#video-description");
 
-const video = document.querySelector("video");
+var video = document.querySelector("video");
+video.onended = onVideoEnd;
 const source = document.querySelector("source");
+const loadingScreen = document.querySelector("#loading-screen");
 
 const playBtn = document.querySelector("button#play");
 const playBtnIcon = playBtn.lastChild;
@@ -49,37 +52,45 @@ const nextBtn = document.querySelector("button#next");
 
 var isPlaying = false;
 var currentVideoIdx = 0;
-const videoBlobs = [];
+const videos = [];
+var isLoaded = false;
 
+function preloadVideos(urls) {
+    let loadedVids = 0;
+    urls.forEach(url => {
+        const videoElement = document.createElement("video");
+        
+        videoElement.src = url;
+        videoElement.load();
 
-//load videos
-Promise.all(videoUrls.map(url =>
-    fetch(url)
-        .then(response => {
-            if (!response.ok) throw new Error(`Failed to load ${url}`);
-            return response.blob();
-    })
-)).then(blobs =>{
-    videoBlobs.push(...blobs);
-}).catch(err =>{
-    console.log("Error occured while loading videos: ", err);
-});
+        videoElement.oncanplaythrough  = () => {
+            loadedVids++;
+            if (loadedVids === urls.length) {
+                isLoaded = true;
+                enableButtons();
+                loadingScreen.style.display = "none";
+            };
+        };
+        videos.push(videoElement);
+    });
+}
 
-//changes video, description and header.
 function swapVideo(idx) {
-    video.src = URL.createObjectURL(videoBlobs[idx]);
-    video.load();
-    videoDescription.innerHTML = videoDescriptions[idx];
-    videoHeader.innerHTML = videoHeaders[idx];
-}//end swapVideo
-
+    const currentVideo = videoWrapper.querySelector("video");
+    if (currentVideo) {
+        currentVideo.remove();
+    };
+    const newVideo = videos[idx];
+    videoWrapper.appendChild(newVideo);
+    video = newVideo;
+    video.onended = onVideoEnd;
+}
 //swaps the svg of the play btn.
 function updatePlayBtnIcon() {
     playBtnIcon.innerHTML = isPlaying ? pauseSVG : playSVG;
 }//end updatePlayBtnIcon
 
-window.addEventListener("load", () => {
-
+function enableButtons() {
     playBtn.addEventListener("click", () => {
         if (!isPlaying) {
             video.play()
@@ -103,18 +114,18 @@ window.addEventListener("load", () => {
     });
     nextBtn.addEventListener("click", () =>{
         if (isPlaying) video.pause();
-        currentVideoIdx = (currentVideoIdx + 1) % (videoBlobs.length - 1);
+        currentVideoIdx = (currentVideoIdx + 1) % (videos.length - 1);
 
         swapVideo(currentVideoIdx);
         isPlaying = false;
         playBtnIcon.innerHTML = playSVG;
     });
-    video.addEventListener("ended", () => {
-        isPlaying = false;
-        updatePlayBtnIcon()
-    });
-    video.addEventListener("canplay", () => {
-        const loadingScreen = document.getElementById("loading-screen");
-        loadingScreen.style.display = "none";
-    })
+};
+
+function onVideoEnd() {
+    isPlaying = false;
+    updatePlayBtnIcon();
+}
+window.addEventListener("load", () => {
+    preloadVideos(videoUrls);
 });
