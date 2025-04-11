@@ -117,7 +117,7 @@ function enableButtons() {
     });
     nextBtn.addEventListener("click", () =>{
         if (isPlaying) video.pause();
-        currentVideoIdx = (currentVideoIdx + 1) % (videos.length - 1);
+        currentVideoIdx = (currentVideoIdx + 1) % (videos.length);
 
         swapVideo(currentVideoIdx);
         isPlaying = false;
