@@ -15,7 +15,8 @@ p#video-description {
     display: flex;
     justify-self: center;
 }
-/* Button Styling */
+
+/* Media Player Button Styling */
 svg {
     fill: white;
 }

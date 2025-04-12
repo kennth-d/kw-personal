@@ -253,13 +253,13 @@ div.favorites {
     justify-items: center;
 }
 div.favorites ul {
-    margin: auto, 1em;
+    margin: auto 1em;
     list-style: none;
 }
 div.favorites ul li a{
     text-decoration: none;
     font-size: 1em;
-    font-weight: 300px;
+    font-weight: 600;
 }
 div.favorites ul li:nth-child(1)::before {
     content: "🍰  ";
