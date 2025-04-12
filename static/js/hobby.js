@@ -11,12 +11,12 @@ const playSVG = `
 `;
 
 const videoUrls = [
-    "./static/video/DBFZ - assist.mp4",
-    "./static/video/DBFZ - defense.mp4",
-    "./static/video/DBFZ - feint.mp4",
-    "./static/video/DBFZ - hbd.mp4",
-    "./static/video/DBFZ - mix.mp4",
-    "./static/video/DBFZ - tod.mp4",
+    "./static/video/DBFZ-assist.mp4",
+    "./static/video/DBFZ-defense.mp4",
+    "./static/video/DBFZ-feint.mp4",
+    "./static/video/DBFZ-hbd.mp4",
+    "./static/video/DBFZ-mix.mp4",
+    "./static/video/DBFZ-tod.mp4",
 ];
 const videoDescriptions = [
     "One of the core mechanics of the game allows you to call out your other characters breifly to attack, or in some cases defend.",
