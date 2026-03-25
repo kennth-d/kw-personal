@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LED Tail Light Simulator</title>
+<style>
+    body {
+        background: #111;
+        color: #ddd;
+        position: absolute;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -25%);
+        
+    }
+
+    .controls {
+        margin: 20px;
+    }
+
+    button, input {
+        margin: 5px;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .tail-light {
+        display: flex;
+        justify-content: center;
+        gap: 80px;
+        margin-top: 50px;
+    }
+
+    /* Torino-style horizontal bar */
+    .cluster {
+        display: flex;
+        gap: 10px;
+        padding: 15px 25px;
+        background: #300;
+        border-radius: 12px;
+        box-shadow: inset 0 0 20px #000;
+    }
+
+    .led {
+        width: 45px;
+        height: 20px;
+        border-radius: 4px;
+        background: #200;
+        transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    .dim {
+        background: #600;
+    }
+
+    .bright {
+        background: red;
+        box-shadow: 0 0 10px red;
+    }
+
+    .amber {
+        background: orange;
+        box-shadow: 0 0 10px orange;
+    }
+</style>
+</head>
+<body>
+
+<h2>Tail Light Simulator</h2>
+
+<div class="controls">
+    <label><input type="checkbox" id="running"> Running Lights</label>
+    <label><input type="checkbox" id="hazards"> Hazard Lights</label>
+    <label><input type="checkbox" id="leftBlink" name="blinker"> Left Blinker</label>
+    <label><input type="checkbox" id="rightBlink" name="blinker"> Right Blinker</label>
+    <label>
+    Blink Interval (ms):
+    <input id="blinkIntervalInput" type="range" min="100" max="1000" step="50" value="300">
+    <span id="blinkIntervalLabel">300</span>
+</label>
+    <br>
+    <button id="brakebtn">Brake</button>
+    <button id="resetbtn">Reset</button>
+</div>
+
+<div class="tail-light">
+    <div class="cluster" id="leftCluster"></div>
+    <div class="cluster" id="rightCluster"></div>
+</div>
+<div class="values">
+    <p>Bits: <span id="output">00000000 00000000</span></p>
+</div>
+
+<script>
+
+const leftCluster = document.getElementById('leftCluster');
+const rightCluster = document.getElementById('rightCluster');
+
+function createCluster(cluster) {
+    for (let i = 0; i < 5; i++) {
+        const led = document.createElement('div');
+        led.className = 'led';
+        cluster.appendChild(led);
+    }
+}
+
+createCluster(leftCluster);
+createCluster(rightCluster);
+
+const running = document.getElementById('running');
+const leftBlink = document.getElementById('leftBlink');
+const rightBlink = document.getElementById('rightBlink');
+const hazard = document.getElementById('hazards');
+const brakebtn = document.getElementById('brakebtn');
+const resetbtn = document.getElementById('resetbtn');
+const output = document.getElementById('output');
+const blinkInput = document.getElementById('blinkInterval');
+const input = document.getElementById("blinkIntervalInput");
+const label = document.getElementById("blinkIntervalLabel");
+
+input.addEventListener("input", () => {
+    BLINK_INTERVAL = Number(input.value);
+    label.textContent = BLINK_INTERVAL;
+
+    resetSimulation();
+});
+
+let BLINK_INTERVAL = 300;
+
+const OFF = 0;
+const ON = 1;
+
+// Inputs
+let left    = OFF;
+let right   = OFF;
+let haz     = OFF;
+let brake   = OFF;
+let drl     = OFF;
+let reset   = OFF;
+
+let blinkTimer = 0;
+
+function leftByte(i) { return 8 + i; }
+function rightByte(i) { return i; }
+
+// State strictly as an LED output.
+const IDLE = 0x0000;
+
+// Bits are sequenced from inner to outer
+// so left and right sequences are reversed.
+
+// right turn light phases
+const R1 = 0x0010;
+const R2 = 0x0018;
+const R3 = 0x001C;
+const R4 = 0x001E;
+const R5 = 0x001F;
+
+// left turn light phases
+const L1 = 0x0100;
+const L2 = 0x0300;
+const L3 = 0x0700;
+const L4 = 0x0F00;
+const L5 = 0x1F00;
+
+//Hazards
+const LR5 = 0x1F1F;
+
+let lights = 0; // IDLE
+let clock = 0;
+
+function renderLights(lights, brake, running) {
+    const lc = leftCluster.children;
+    const rc = rightCluster.children;
+
+    for (let i = 0; i < 5; i++) {
+        const leftBitIndex  = 4 - i;
+        const rightBitIndex = 4 - i;
+
+        // LEFT
+        const leftBitOn = (lights >> (8 + leftBitIndex)) & 1;
+        const leftLED = lc[i];
+        leftLED.classList.remove("bright", "dim");
+
+        if (leftBitOn) {
+            leftLED.classList.add("bright");
+        } else if (brake && !leftActive()) {
+            leftLED.classList.add("bright");
+        } else if (running) {
+            leftLED.classList.add("dim");
+        }
+
+        // RIGHT
+        const rightBitOn = (lights >> rightBitIndex) & 1;
+        const rightLED = rc[i];
+        rightLED.classList.remove("bright", "dim");
+
+        if (rightBitOn) {
+            rightLED.classList.add("bright");
+        } else if (brake && !rightActive()) {
+            rightLED.classList.add("bright");
+        } else if (running) {
+            rightLED.classList.add("dim");
+        }
+    }
+}
+
+function readInputs() 
+{
+    left    = leftBlink.checked ? ON : OFF;
+    right   = rightBlink.checked ? ON : OFF;
+    haz     = hazard.checked ? ON : OFF;
+    drl     = running.checked ? ON : OFF;
+    brake   = brakebtn.matches(":active") ? ON : OFF;
+    reset   = resetbtn.matches(":active") ? ON : OFF;
+}
+
+
+const transitionTable =
+{
+    [L1]: L2, [L2]: L3, [L3]: L4, [L4]: L5, [L5]: IDLE,
+    [R1]: R2, [R2]: R3, [R3]: R4, [R4]: R5, [R5]: IDLE,
+    [LR5]: IDLE,
+};
+    
+const transition = (state) => transitionTable[state];
+
+function resetInputs() 
+{
+    left    = OFF;
+    right   = OFF;
+    haz     = OFF;
+    drl     = OFF;
+    brake   = OFF;
+    reset   = OFF;
+    leftBlink.checked = false;
+    rightBlink.checked = false;
+    hazard.checked = false;
+    running.checked = false;
+}
+
+const leftActive = () =>  ((lights & 0x1F00) !== 0 || left);
+const rightActive = () => ((lights & 0x001F) !== 0 || right);
+
+function resetSimulation() {
+    lights = 0;
+    blinkTimer = 0;
+}
+
+// Update logic
+let lastUpdate = performance.now();
+const updateInterval = 10;
+
+function update(dt) {
+    
+    blinkTimer += dt;
+    readInputs();
+    if (reset)
+    {
+        resetInputs();
+        lights = IDLE;
+        blinkTimer = 0;
+        return;
+    }
+
+    const hazardsOn = (haz || (left && right));
+
+    while(blinkTimer >= BLINK_INTERVAL) 
+    {
+        blinkTimer -= BLINK_INTERVAL;
+
+        if (lights == IDLE)
+        {
+
+            if (hazardsOn) lights = LR5;
+            else if (left) lights = L1;
+            else if (right) lights = R1;
+        }
+        else if (lights == LR5)
+        {
+            lights = IDLE;
+        }
+        else if (lights >= R1 || lights <= R5 || lights >= L1 || lights <= L5)
+        {
+            if (hazardsOn) lights = LR5;
+            else if (leftActive() && right) lights = R1; 
+            else if (rightActive() && left) lights = L1;
+            else lights = transition(lights);
+        }
+        else
+        {
+            lights = IDLE;
+        }
+    }
+    output.innerText = (lights >>> 0).toString(2).padStart(16, '0');
+    renderLights(lights, brake, drl);
+}
+ /*
+
+
+function update(dt) {
+    
+    blinkTimer += dt;
+    readInputs();
+
+    if (reset)
+    {
+        resetInputs();
+        lights = IDLE;
+    }
+    else
+    {
+        if(haz || (left && right))
+        {
+            lights = LR5;
+        }
+        else if (left || lights & 0x1F00 !== 0)
+        {
+            if ((lights & 0x1F00) !== 0 && right)
+            {
+                lights = R1;
+            }
+                lights = IDLE;
+
+            lights = transition(lights);
+        }
+
+        output.innerText = (lights >>> 0).toString(2).padStart(16, '0');
+        renderLights(lights, brake, drl);
+    }
+}
+*/
+
+// Refresh loop
+setInterval(()=>{
+    const now = performance.now();
+    const dt = now - lastUpdate;
+    lastUpdate = now;
+    update(dt);
+}, updateInterval);
+</script>
+
+</body>
+</html>
