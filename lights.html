@@ -64,6 +64,13 @@
         background: orange;
         box-shadow: 0 0 10px orange;
     }
+    .blink-control {
+        width:  50%;
+        transform:translateX(50%);
+        display: flex;
+        align-items: center; /* vertically centers children */
+        gap: 8px; /* optional spacing between elements */
+    }
 </style>
 </head>
 <body>
@@ -75,11 +82,12 @@
     <label><input type="checkbox" id="hazards"> Hazard Lights</label>
     <label><input type="checkbox" id="leftBlink" name="blinker"> Left Blinker</label>
     <label><input type="checkbox" id="rightBlink" name="blinker"> Right Blinker</label>
-    <label>
-    Blink Interval (ms):
-    <input id="blinkIntervalInput" type="range" min="100" max="1000" step="50" value="300">
-    <span id="blinkIntervalLabel">300</span>
-</label>
+    <div class="blink-control">
+        <label>Blink Interval (ms):</label>
+        <input id="blinkIntervalInput" type="range" min="100" max="1000" step="50" value="300">
+        <span id="blinkIntervalLabel"> 300</span>
+    </div>
+
     <br>
     <button id="brakebtn">Brake</button>
     <button id="resetbtn">Reset</button>
